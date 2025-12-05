@@ -1,15 +1,36 @@
 package com.cgi.parizek.matej.mapper;
 
-import com.cgi.parizek.matej.dto.MissionDTO;
-import com.cgi.parizek.matej.dto.MissionRewardDTO;
+import com.cgi.parizek.matej.dto.MissionDto;
+import com.cgi.parizek.matej.dto.MissionRewardDto;
+import com.cgi.parizek.matej.dto.TagDto;
 import com.cgi.parizek.matej.entity.Mission;
-import com.cgi.parizek.matej.entity.Tag;
 import lombok.experimental.UtilityClass;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class MissionMapper {
-    public MissionDTO mapMission(Mission mission) {
-        return new MissionDTO(
+
+    public MissionDto map(Mission mission) {
+        if (mission == null) {
+            return null;
+        }
+
+        List<MissionRewardDto> rewards = mission.getRewards() == null
+                ? Collections.emptyList()
+                : mission.getRewards().stream()
+                    .map(MissionRewardMapper::map)
+                    .toList();
+
+        Set<TagDto> tags = mission.getTags() == null
+                ? Collections.emptySet()
+                : mission.getTags().stream()
+                    .map( TagMapper::map).collect(Collectors.toSet());
+
+        return new MissionDto(
                 mission.getId(),
                 mission.getType(),
                 mission.getName(),
@@ -17,9 +38,9 @@ public class MissionMapper {
                 mission.isCompleted(),
                 mission.getProgress(),
                 mission.getRequiredProgress(),
-                mission.getRewards().stream()
-                        .map(r -> new MissionRewardDTO(r.getRewardType(), r.getAmount())).toList(),
-                mission.getTags().stream().map(Tag::getName).toList()
+                mission.getUpdatedAt(),
+                rewards,
+                tags
         );
     }
 }

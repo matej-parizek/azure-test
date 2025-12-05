@@ -16,16 +16,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public abstract class ABaseEntity {
-    @Column(name = "update_at", nullable = false)
-    protected LocalDateTime updateAt;
+    @Column(name = "updated_at", nullable = false)
+    protected LocalDateTime updatedAt;
 
     @PrePersist
     void onCreate(){
-        updateAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     void onUpdate(){
-        updateAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 }

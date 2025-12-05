@@ -19,6 +19,12 @@ public class Mission extends ABaseEntity {
     @Id
     private Long id;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
+
     @Column(nullable = false)
     private String type;
 
@@ -37,9 +43,13 @@ public class Mission extends ABaseEntity {
     @Column(name="required_progress", nullable = false)
     private int requiredProgress = 100;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
     private List<MissionReward> rewards = new ArrayList<>();
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "mission_tags",

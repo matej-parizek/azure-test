@@ -31,14 +31,16 @@ public class SyncPlayer {
             @BindingName("playerId") Long playerId,
             final ExecutionContext context
     ) {
+        context.getLogger().info("Received request to sync player: " + playerId);
+        if (playerId <= 0) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                    .body("Invalid player ID")
+                    .build();
+        }
+        String pageParam = request.getQueryParameters().get("page");
+        int page = pageParam != null ? Integer.parseInt(pageParam) : 0;
         try {
-            context.getLogger().info("Received request to sync player: " + playerId);
-            if (playerId <= 0) {
-                return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
-                        .body("Invalid player ID")
-                        .build();
-            }
-            var dto = playerCachingService.load(playerId);
+            var dto = playerCachingService.load(playerId,page);
             return request.createResponseBuilder(HttpStatus.OK)
                     .header("Content-Type", "application/json")
                     .body(dto)

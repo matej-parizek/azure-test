@@ -1,10 +1,7 @@
 package com.cgi.parizek.matej.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Table(name = "mission_rewards")
 @Entity
@@ -22,6 +19,8 @@ public class MissionReward {
     @Column(nullable = false)
     private int amount;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id", nullable = false)
     private Mission mission;

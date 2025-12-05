@@ -1,7 +1,8 @@
 package com.cgi.parizek.matej.mapper;
 
-import com.cgi.parizek.matej.dto.MissionDTO;
-import com.cgi.parizek.matej.dto.PlayerDTO;
+import com.cgi.parizek.matej.dto.MissionDto;
+import com.cgi.parizek.matej.dto.PlayerDto;
+import com.cgi.parizek.matej.dto.PlayerProfileDto;
 import com.cgi.parizek.matej.entity.Player;
 import lombok.experimental.UtilityClass;
 
@@ -9,16 +10,22 @@ import java.util.List;
 
 @UtilityClass
 public class PlayerMapper {
-    public PlayerDTO mapPlayerDto(Player player, List<MissionDTO> allMissionsDTO) {
-        var profile = player.getProfile();
-        return new PlayerDTO(
+
+    public PlayerDto map(Player player, List<MissionDto> missionDto) {
+        if (player == null) {
+            return null;
+        }
+
+        PlayerProfileDto profileDto = PlayerProfileMapper.map(player.getProfile());
+
+        return new PlayerDto(
                 player.getId(),
                 player.getUsername(),
                 player.getStatus(),
-                profile != null ? profile.getCountry() : null,
-                profile != null && profile.getAge() != null ? profile.getAge() : 0,
-                profile != null ? profile.getBio() : null,
-                allMissionsDTO
+                player.getCreatedAt(),
+                player.getUpdatedAt(),
+                profileDto,
+                missionDto
         );
     }
 }

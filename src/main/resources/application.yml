@@ -29,5 +29,6 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 paging:
   size: 100
+  max-cache-page: 2
 cache:
   ttl: 10m

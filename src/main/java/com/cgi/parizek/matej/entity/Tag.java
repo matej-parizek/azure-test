@@ -1,10 +1,7 @@
 package com.cgi.parizek.matej.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +20,8 @@ public class Tag {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private Set<Mission> missions = new HashSet<>();
 }

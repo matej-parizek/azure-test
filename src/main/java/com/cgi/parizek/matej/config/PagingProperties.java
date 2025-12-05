@@ -9,4 +9,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("paging")
 public class PagingProperties {
     private int size;
+    private int maxCachePage;
 }
