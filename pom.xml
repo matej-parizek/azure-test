@@ -22,6 +22,8 @@
         <azure.functions.java.library.version>3.2.2</azure.functions.java.library.version>
         <functionAppName>azure-function-examples-1202155815</functionAppName>
         <start-class>com.cgi.parizek.matej.PlayerMissionsApplication</start-class>
+        <spring-cloud-function.version>4.2.3</spring-cloud-function.version>
+        <faker.version>2.4.2</faker.version>
     </properties>
     <dependencies>
         <dependency>
@@ -90,13 +92,24 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-function-adapter-azure</artifactId>
-            <version>4.2.3</version>
+            <version>${spring-cloud-function.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${faker.version}</version>
+            <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
