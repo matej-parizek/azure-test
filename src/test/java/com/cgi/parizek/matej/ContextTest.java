@@ -1,7 +1,7 @@
 package com.cgi.parizek.matej;
 
 import com.cgi.parizek.matej.config.RedisConfig;
-import com.cgi.parizek.matej.controller.SyncPlayer;
+import com.cgi.parizek.matej.controller.PlayerController;
 import com.cgi.parizek.matej.repository.IMissionRepository;
 import com.cgi.parizek.matej.repository.IPlayerRepository;
 import com.cgi.parizek.matej.service.MissionService;
@@ -31,7 +31,7 @@ public class ContextTest {
         Assertions.assertNotNull(applicationContext);
         Assertions.assertNotNull(applicationContext.getBean(MissionService.class));
         Assertions.assertNotNull(applicationContext.getBean(PlayerService.class));
-        Assertions.assertNotNull(applicationContext.getBean(SyncPlayer.class));
+        Assertions.assertNotNull(applicationContext.getBean(PlayerController.class));
         Assertions.assertNotNull(
                 applicationContext.getBean(LocalContainerEntityManagerFactoryBean.class));
         Assertions.assertNotNull(applicationContext.getBean(DataSource.class));

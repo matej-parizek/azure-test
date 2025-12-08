@@ -2,8 +2,8 @@ CREATE TABLE players (
     id BIGINT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-    created_at DATETIME2 NOT NULL DEFAULT GETDATE(),
-    updated_at DATETIME2 NOT NULL DEFAULT GETDATE()
+    created_at DATETIME2 NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    updated_at DATETIME2 NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );
 
 
@@ -12,7 +12,7 @@ CREATE TABLE player_profiles (
     country VARCHAR(50) NOT NULL,
     age INT NULL,
     bio VARCHAR(255) NULL,
-    updated_at DATETIME2 NOT NULL DEFAULT GETDATE(),
+    updated_at DATETIME2 NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     FOREIGN KEY (player_id) REFERENCES players(id)
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE missions (
     completed BIT NOT NULL DEFAULT 0,
     progress INT NOT NULL DEFAULT 0,
     required_progress INT NOT NULL DEFAULT 100,
-    updated_at DATETIME2 NOT NULL DEFAULT GETDATE(),
+    updated_at DATETIME2 NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     FOREIGN KEY (player_id) REFERENCES players(id)
 );
 

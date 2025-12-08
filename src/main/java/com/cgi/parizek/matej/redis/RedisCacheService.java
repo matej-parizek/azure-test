@@ -1,32 +1,39 @@
 package com.cgi.parizek.matej.redis;
 
 import com.cgi.parizek.matej.config.CacheProperties;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.Instant;
 
-@Component
 @RequiredArgsConstructor
-public class RedisCacheService<T> implements CacheService<T>{
+public class RedisCacheService<T> implements CacheService<T> {
     private final CacheProperties properties;
-
-    private final RedisTemplate<String, T> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final Class<T> type;
 
     @Override
     public void save(String key, T value, Duration ttl) {
-        redisTemplate.opsForValue().set(key, value, ttl);
+        redisTemplate.opsForHash().put(key, "last_sync_at", Instant.now().toEpochMilli());
+        redisTemplate.opsForHash().put(key, "data", value);
+        redisTemplate.opsForHash().expiration(key, ttl);
     }
 
     @Override
-    public void save(String key, T value){
-        this.save(key,value, properties.getTtl());
+    public void save(String key, T value) {
+        this.save(key, value, properties.getTtl());
     }
 
     @Override
-    public T get(String key) {
-        return redisTemplate.opsForValue().get(key);
+    public @Nullable T get(String key) {
+        var data = redisTemplate.opsForHash().get(key, "data");
+        if (!type.isInstance(data)) {
+            delete(key);
+            return null;
+        }
+        return type.cast(data);
     }
 
     @Override
