@@ -9,10 +9,10 @@ import java.time.Duration;
 import java.time.Instant;
 
 @RequiredArgsConstructor
-public class RedisCacheService<T> implements CacheService<T> {
-    private final CacheProperties properties;
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final Class<T> type;
+public abstract class RedisCache<T> implements ICacheService<T> {
+    protected final CacheProperties properties;
+    protected final RedisTemplate<String, Object> redisTemplate;
+    protected final Class<T> type;
 
     @Override
     public void save(String key, T value, Duration ttl) {
@@ -35,6 +35,7 @@ public class RedisCacheService<T> implements CacheService<T> {
         }
         return type.cast(data);
     }
+
 
     @Override
     public void delete(String key) {

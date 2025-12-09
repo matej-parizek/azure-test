@@ -1,9 +1,6 @@
 package com.cgi.parizek.matej.config;
 
 
-import com.cgi.parizek.matej.dto.PlayerDto;
-import com.cgi.parizek.matej.redis.CacheService;
-import com.cgi.parizek.matej.redis.RedisCacheService;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,10 +28,5 @@ public class RedisConfig {
 
         template.afterPropertiesSet();
         return template;
-    }
-
-    @Bean
-    public CacheService<PlayerDto> playerCacheService(RedisTemplate<String, Object> redisTemplate, CacheProperties properties) {
-        return new RedisCacheService<>(properties,redisTemplate, PlayerDto.class);
     }
 }

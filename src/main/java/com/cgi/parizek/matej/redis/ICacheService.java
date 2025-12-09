@@ -1,6 +1,6 @@
 package com.cgi.parizek.matej.redis;
 
-public interface CacheService<T> {
+public interface ICacheService<T> {
 
     void save(String key, T value);
 
