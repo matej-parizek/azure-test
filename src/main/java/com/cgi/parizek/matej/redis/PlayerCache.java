@@ -41,7 +41,6 @@ public class PlayerCache extends RedisCache<Player> implements IPlayerCache {
 
     @Override
     public List<Mission> getMissions(String key, Integer page) {
-
         return (List<Mission>) redisTemplate.opsForHash()
                 .get(key, MISSION_KEY.formatted(page, pagingProperties.getSize()));
     }
