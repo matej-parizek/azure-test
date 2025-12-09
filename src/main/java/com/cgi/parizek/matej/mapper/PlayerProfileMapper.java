@@ -16,12 +16,12 @@ public class PlayerProfileMapper {
                 ? profile.getPlayer().getId()
                 : null;
 
-        return new PlayerProfileDto(
-                playerId,
-                profile.getCountry(),
-                profile.getAge(),
-                profile.getBio(),
-                profile.getUpdatedAt()
-        );
+        return PlayerProfileDto.builder()
+                .playerId(playerId)
+                .country(profile.getCountry())
+                .age(profile.getAge())
+                .bio(profile.getBio())
+                .updatedAt(profile.getUpdatedAt())
+                .build();
     }
 }

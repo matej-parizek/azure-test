@@ -22,25 +22,25 @@ public class MissionMapper {
         List<MissionRewardDto> rewards = mission.getRewards() == null
                 ? Collections.emptyList()
                 : mission.getRewards().stream()
-                    .map(MissionRewardMapper::map)
-                    .toList();
+                .map(MissionRewardMapper::map)
+                .toList();
 
         Set<TagDto> tags = mission.getTags() == null
                 ? Collections.emptySet()
                 : mission.getTags().stream()
-                    .map( TagMapper::map).collect(Collectors.toSet());
+                .map(TagMapper::map).collect(Collectors.toSet());
 
-        return new MissionDto(
-                mission.getId(),
-                mission.getType(),
-                mission.getName(),
-                mission.getDescription(),
-                mission.isCompleted(),
-                mission.getProgress(),
-                mission.getRequiredProgress(),
-                mission.getUpdatedAt(),
-                rewards,
-                tags
-        );
+        return MissionDto.builder()
+                .id(mission.getId())
+                .type(mission.getType())
+                .name(mission.getName())
+                .description(mission.getDescription())
+                .completed(mission.isCompleted())
+                .progress(mission.getProgress())
+                .requiredProgress(mission.getRequiredProgress())
+                .updatedAt(mission.getUpdatedAt())
+                .rewards(rewards)
+                .tags(tags)
+                .build();
     }
 }

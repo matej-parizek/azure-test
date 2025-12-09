@@ -11,10 +11,10 @@ public class MissionRewardMapper {
         if (reward == null) {
             return null;
         }
-        return new MissionRewardDto(
-                reward.getId(),
-                reward.getRewardType(),
-                reward.getAmount()
-        );
+        return MissionRewardDto.builder()
+                .id(reward.getId())
+                .rewardType(reward.getRewardType())
+                .amount(reward.getAmount())
+                .build();
     }
 }

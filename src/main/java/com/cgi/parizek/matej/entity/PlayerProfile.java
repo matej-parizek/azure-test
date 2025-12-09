@@ -2,6 +2,7 @@ package com.cgi.parizek.matej.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "player_profiles")
@@ -9,6 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class PlayerProfile extends ABaseEntity {
     @Id
     @Column(name = "player_id")
@@ -27,6 +29,6 @@ public class PlayerProfile extends ABaseEntity {
     @Column
     private Integer age;
 
-    @Column(length = 255)
+    @Column
     private String bio;
 }

@@ -2,6 +2,7 @@ package com.cgi.parizek.matej.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@SuperBuilder
 public class Mission extends ABaseEntity {
     @Id
     private Long id;

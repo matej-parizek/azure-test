@@ -11,9 +11,9 @@ public class TagMapper {
         if (tag == null) {
             return null;
         }
-        return new TagDto(
-                tag.getId(),
-                tag.getName()
-        );
+        return TagDto.builder()
+                .name(tag.getName())
+                .id(tag.getId())
+                .build();
     }
 }

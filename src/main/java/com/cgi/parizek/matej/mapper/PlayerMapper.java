@@ -18,14 +18,14 @@ public class PlayerMapper {
 
         PlayerProfileDto profileDto = PlayerProfileMapper.map(player.getProfile());
 
-        return new PlayerDto(
-                player.getId(),
-                player.getUsername(),
-                player.getStatus(),
-                player.getCreatedAt(),
-                player.getUpdatedAt(),
-                profileDto,
-                missionDto
-        );
+        return PlayerDto.builder()
+                .id(player.getId())
+                .username(player.getUsername())
+                .status(player.getStatus())
+                .createdAt(player.getCreatedAt())
+                .updatedAt(player.getUpdatedAt())
+                .profile(profileDto)
+                .missions(missionDto)
+                .build();
     }
 }
