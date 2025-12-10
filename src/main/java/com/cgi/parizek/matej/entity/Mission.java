@@ -19,6 +19,7 @@ import java.util.Set;
 @SuperBuilder
 public class Mission extends ABaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ToString.Exclude

@@ -16,24 +16,22 @@ public class EntityFactory {
      * Generated player data
      * @return {@link Player}
      */
-    public Player player(Long id){
+    public Player player(){
         var now = LocalDateTime.now();
         var player = Player.builder()
-                .id(id)
                 .username(faker.name().firstName())
                 .status("ACTIVE")
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
-        var profile = playerProfile(id);
+        var profile = playerProfile();
         player.setProfile(profile);
         profile.setPlayer(player);
         return player;
     }
 
-    public PlayerProfile playerProfile(Long id){
+    public PlayerProfile playerProfile(){
         return PlayerProfile.builder()
-                .playerId(id)
                 .age(faker.number().numberBetween(18,80))
                 .bio(faker.lorem().sentence(8))
                 .country(faker.country().name())

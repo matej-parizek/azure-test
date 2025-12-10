@@ -1,5 +1,6 @@
 package com.cgi.parizek.matej.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +18,7 @@ import java.util.List;
 @SuperBuilder
 public class Player extends ABaseEntity{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     @Column(nullable = false, unique = true)

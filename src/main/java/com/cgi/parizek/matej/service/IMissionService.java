@@ -6,5 +6,4 @@ import org.springframework.data.domain.Pageable;
 
 public interface IMissionService {
     Page<Mission> retrieveByPlayerId(Long playerId, Pageable pageable);
-
 }

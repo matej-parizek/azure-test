@@ -1,13 +1,13 @@
 package com.cgi.parizek.matej.redis;
 
-import com.cgi.parizek.matej.entity.Mission;
-import com.cgi.parizek.matej.entity.Player;
+import com.cgi.parizek.matej.dto.MissionDto;
+import com.cgi.parizek.matej.dto.PlayerDto;
 
 import java.util.List;
 
-public interface IPlayerCache extends ICacheService<Player> {
+public interface IPlayerCache extends ICacheService<PlayerDto> {
 
-    void saveMissions(String key, List<Mission> value, Integer page);
+    void saveMissions(String key, List<MissionDto> value, Integer page);
 
-    List<Mission> getMissions(String key, Integer page);
+    List<MissionDto> getMissions(String key, Integer page);
 }

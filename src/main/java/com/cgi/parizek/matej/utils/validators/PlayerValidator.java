@@ -7,13 +7,11 @@ import lombok.experimental.UtilityClass;
 public class PlayerValidator {
 
     public boolean validation(PlayerRequestDto body) {
-        return body != null
-                && body.username() != null
-                && !body.username().isBlank()
-                && body.username().length() <= 50
-                && body.status() != null
-                && !body.status().isBlank()
-                && body.status().length() <= 20;
+        return body != null &&
+                !body.getUsername().isBlank() &&
+                body.getUsername().length() <= 50 &&
+                !body.getStatus().isBlank() &&
+                body.getStatus().length() <= 20;
     }
 
 }

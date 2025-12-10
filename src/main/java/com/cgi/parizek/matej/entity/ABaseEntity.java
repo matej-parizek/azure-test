@@ -7,6 +7,7 @@ import jakarta.persistence.PreUpdate;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @SuperBuilder
-public abstract class ABaseEntity {
+public abstract class ABaseEntity implements Serializable {
     @Column(name = "updated_at", nullable = false)
     protected LocalDateTime updatedAt;
 

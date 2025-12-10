@@ -12,7 +12,7 @@
     <artifactId>azure-test</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>azure-test</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Demo azure project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
         <spring-boot.version>3.5.8</spring-boot.version>
@@ -24,6 +24,12 @@
         <start-class>com.cgi.parizek.matej.PlayerMissionsApplication</start-class>
         <spring-cloud-function.version>4.2.3</spring-cloud-function.version>
         <faker.version>2.4.2</faker.version>
+        <openapi.version>2.8.14</openapi.version>
+        <apache-jar.version>3.4.2</apache-jar.version>
+        <maven-clean.version>3.1.0</maven-clean.version>
+        <openapi-tools.version>7.17.0</openapi-tools.version>
+        <mssql-container.version>1.21.3</mssql-container.version>
+        <redis-embeded.version>1.4.2</redis-embeded.version>
     </properties>
     <dependencies>
         <dependency>
@@ -63,6 +69,14 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
@@ -95,6 +109,10 @@
             <version>${spring-cloud-function.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
             <groupId>net.datafaker</groupId>
             <artifactId>datafaker</artifactId>
             <version>${faker.version}</version>
@@ -108,6 +126,12 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.codemonstur</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>${redis-embeded.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -127,6 +151,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-bom</artifactId>
+                <version>${openapi.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -135,7 +166,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>${apache-jar.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -156,6 +187,9 @@
                             <artifactId>lombok</artifactId>
                         </path>
                     </annotationProcessorPaths>
+                    <generatedSourcesDirectory>
+                        ${project.build.directory}/generated-sources/openapi/src/main/java
+                    </generatedSourcesDirectory>
                 </configuration>
             </plugin>
 
@@ -182,7 +216,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${maven-clean.version}</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -190,6 +224,45 @@
                         </fileset>
                     </filesets>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-tools.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>resttemplate</library>
+                            <modelPackage>com.cgi.parizek.matej.dto</modelPackage>
+                            <apiPackage>com.cgi.parizek.matej.api</apiPackage>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                                <useJakartaEe>true</useJakartaEe>
+                                <additionalModelTypeAnnotations>
+                                    @lombok.experimental.SuperBuilder @lombok.extern.jackson.Jacksonized
+                                </additionalModelTypeAnnotations>
+                                <generateModels>true</generateModels>
+                                <openApiNullable>false</openApiNullable>
+                                <useSpringBoot3>true</useSpringBoot3>
+                            </configOptions>
+                            <typeMappings>
+                                <typeMapping>DateTime=LocalDateTime</typeMapping>
+                            </typeMappings>
+                            <importMappings>
+                                <importMapping>LocalDateTime=java.time.LocalDateTime</importMapping>
+                                <importMapping>Date=java.util.Date</importMapping>
+                            </importMappings>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <output>${project.build.directory}/generated-sources</output>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
