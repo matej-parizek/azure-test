@@ -45,6 +45,8 @@ class PlayerSyncServiceTest {
     void load_success_nonCached() {
         var playerId = 1L;
         var player = EntityFactory.player();
+        player.setId(playerId);
+        player.getProfile().setPlayerId(playerId);
         var pageNumber = 2;
         var key = "player:%s:missions".formatted(playerId);
 
@@ -74,6 +76,8 @@ class PlayerSyncServiceTest {
     void load_success_nonCached_greater_page() {
         var playerId = 1L;
         var player = EntityFactory.player();
+        player.setId(playerId);
+        player.getProfile().setPlayerId(playerId);
         var pageNumber = 3;
         var key = "player:%s:missions".formatted(playerId);
 
@@ -97,12 +101,13 @@ class PlayerSyncServiceTest {
         verify(redisCacheService, times(1)).save(anyString(), any());
     }
 
-
     @Test
     @DisplayName("Success -> Testing loading cached Player")
     void load_success_cached() {
         var playerId = 1L;
         var player = EntityFactory.player();
+        player.setId(playerId);
+        player.getProfile().setPlayerId(playerId);
         var pageNumber = 0;
         var key = "player:%s:missions".formatted(playerId);
         when(redisCacheService.get(eq(key))).thenReturn(PlayerMapper.map(player));
@@ -127,6 +132,8 @@ class PlayerSyncServiceTest {
     void update_success_cached() {
         var playerId = 1L;
         var player = EntityFactory.player();
+        player.setId(playerId);
+        player.getProfile().setPlayerId(playerId);
         var playerRequest = EntityFactory.playerRequest();
         var pageNumber = 0;
         var key = "player:%s:missions".formatted(playerId);
@@ -150,6 +157,8 @@ class PlayerSyncServiceTest {
     void update_success_cached_same() {
         var playerId = 1L;
         var player = EntityFactory.player();
+        player.setId(playerId);
+        player.getProfile().setPlayerId(playerId);
         var pageNumber = 0;
         var key = "player:%s:missions".formatted(playerId);
         var playerRequest = PlayerRequestDto.builder()
@@ -178,6 +187,8 @@ class PlayerSyncServiceTest {
     void update_success_nonCached() {
         var playerId = 1L;
         var player = EntityFactory.player();
+        player.setId(playerId);
+        player.getProfile().setPlayerId(playerId);
         var playerRequest = EntityFactory.playerRequest();
         var pageNumber = 0;
         var key = "player:%s:missions".formatted(playerId);
@@ -203,6 +214,8 @@ class PlayerSyncServiceTest {
     void update_success_nonCached_same() {
         var playerId = 1L;
         var player = EntityFactory.player();
+        player.setId(playerId);
+        player.getProfile().setPlayerId(playerId);
         var playerRequest = PlayerRequestDto.builder()
                 .username(player.getUsername())
                 .status(player.getStatus())

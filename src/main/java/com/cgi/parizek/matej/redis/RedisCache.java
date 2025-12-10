@@ -1,7 +1,8 @@
 package com.cgi.parizek.matej.redis;
 
 import com.cgi.parizek.matej.config.CacheProperties;
-import jakarta.annotation.Nullable;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -12,7 +13,9 @@ import java.time.Instant;
 public abstract class RedisCache<T> implements ICacheService<T> {
     protected final CacheProperties properties;
     protected final RedisTemplate<String, Object> redisTemplate;
-    protected final Class<T> type;
+    protected final JavaType type;
+    protected final ObjectMapper objectMapper;
+
 
     @Override
     public void save(String key, T value, Duration ttl) {
@@ -27,13 +30,14 @@ public abstract class RedisCache<T> implements ICacheService<T> {
     }
 
     @Override
-    public @Nullable T get(String key) {
-        var data = redisTemplate.opsForHash().get(key, "data");
-        if (!type.isInstance(data)) {
+    public T get(String key) {
+        var raw = redisTemplate.opsForHash().get(key, "data");
+        try {
+            return objectMapper.convertValue(raw, type);
+        } catch (IllegalArgumentException e) {
             delete(key);
             return null;
         }
-        return type.cast(data);
     }
 
 

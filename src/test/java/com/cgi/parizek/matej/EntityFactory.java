@@ -8,6 +8,8 @@ import net.datafaker.Faker;
 
 import java.time.LocalDateTime;
 
+import static io.micrometer.common.util.StringUtils.truncate;
+
 @UtilityClass
 public class EntityFactory {
     private final Faker faker = new Faker();
@@ -16,31 +18,33 @@ public class EntityFactory {
      * Generated player data
      * @return {@link Player}
      */
-    public Player player(){
+    public Player player() {
         var now = LocalDateTime.now();
         var player = Player.builder()
-                .username(faker.name().firstName())
+                .username(truncate(faker.name().firstName(), 20))
                 .status("ACTIVE")
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
+
         var profile = playerProfile();
         player.setProfile(profile);
         profile.setPlayer(player);
+
         return player;
     }
 
-    public PlayerProfile playerProfile(){
+    public PlayerProfile playerProfile() {
         return PlayerProfile.builder()
-                .age(faker.number().numberBetween(18,80))
-                .bio(faker.lorem().sentence(8))
-                .country(faker.country().name())
+                .age(faker.number().numberBetween(18, 80))
+                .bio(truncate(faker.lorem().sentence(8), 255))
+                .country(truncate(faker.country().name(), 50))
                 .build();
     }
 
-    public PlayerRequestDto playerRequest(){
+    public PlayerRequestDto playerRequest() {
         return PlayerRequestDto.builder()
-                .username(faker.name().firstName())
+                .username(truncate(faker.name().firstName(), 20))
                 .status("ACTIVE")
                 .build();
     }
