@@ -1,8 +1,7 @@
 package com.cgi.parizek.matej;
 
 import com.cgi.parizek.matej.dto.PlayerRequestDto;
-import com.cgi.parizek.matej.entity.Player;
-import com.cgi.parizek.matej.entity.PlayerProfile;
+import com.cgi.parizek.matej.entity.*;
 import lombok.experimental.UtilityClass;
 import net.datafaker.Faker;
 
@@ -14,38 +13,57 @@ import static io.micrometer.common.util.StringUtils.truncate;
 public class EntityFactory {
     private final Faker faker = new Faker();
 
-    /**
-     * Generated player data
-     * @return {@link Player}
-     */
-    public Player player() {
+    public Player.PlayerBuilder player(Long id) {
         var now = LocalDateTime.now();
-        var player = Player.builder()
+        return Player.builder()
+                .id(id)
                 .username(truncate(faker.name().firstName(), 20))
                 .status("ACTIVE")
                 .createdAt(now)
-                .updatedAt(now)
-                .build();
-
-        var profile = playerProfile();
-        player.setProfile(profile);
-        profile.setPlayer(player);
-
-        return player;
+                .updatedAt(now);
     }
 
-    public PlayerProfile playerProfile() {
+    public PlayerProfile.PlayerProfileBuilder playerProfile(Long id) {
+        var fullWord = faker.lorem().word();
+        var word = fullWord.substring(0, Math.min(255, fullWord.length()));
         return PlayerProfile.builder()
+                .playerId(id)
                 .age(faker.number().numberBetween(18, 80))
-                .bio(truncate(faker.lorem().sentence(8), 255))
-                .country(truncate(faker.country().name(), 50))
-                .build();
+                .bio(word)
+                .country(truncate(faker.country().name(), 50));
     }
 
-    public PlayerRequestDto playerRequest() {
+
+    public PlayerRequestDto.PlayerRequestDtoBuilder playerRequest() {
         return PlayerRequestDto.builder()
                 .username(truncate(faker.name().firstName(), 20))
-                .status("ACTIVE")
-                .build();
+                .status("ACTIVE");
+    }
+
+    public Mission.MissionBuilder mission(Long id) {
+        var fullWord = faker.lorem().word();
+        var description = fullWord.substring(0, Math.min(255, fullWord.length()));
+        var type = fullWord.substring(0, Math.min(50, fullWord.length()));
+        return Mission.builder()
+                .id(id)
+                .completed(faker.bool().bool())
+                .description(description)
+                .progress(faker.number().randomDigit())
+                .name(truncate(faker.name().firstName(), 100))
+                .type(type)
+                .requiredProgress(faker.number().randomDigit());
+    }
+
+    public MissionReward.MissionRewardBuilder missionReward(Long id) {
+        return MissionReward.builder()
+                .id(id)
+                .amount(Long.valueOf(faker.number().randomNumber()).intValue())
+                .rewardType(truncate(faker.naruto().eye(), 50));
+    }
+
+    public Tag.TagBuilder tag(Long id) {
+        return Tag.builder()
+                .id(id)
+                .name(faker.name().firstName());
     }
 }

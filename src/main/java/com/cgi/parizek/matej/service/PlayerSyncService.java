@@ -47,7 +47,7 @@ public class PlayerSyncService implements IPlayerSyncService {
         var missions = retriveMissionsAndSave(playerId, 0);
         var compare = compare(player, body);
 
-        playerService.update(player,body);
+        playerService.update(player, body);
         if (!compare || cached == null)
             cacheService.save(PLAYER_CACHE.formatted(playerId), PlayerMapper.map(player));
 

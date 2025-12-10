@@ -28,10 +28,10 @@ public class Mission extends ABaseEntity {
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String type;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column
@@ -53,7 +53,7 @@ public class Mission extends ABaseEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "mission_tags",
             joinColumns = @JoinColumn(name = "mission_id"),

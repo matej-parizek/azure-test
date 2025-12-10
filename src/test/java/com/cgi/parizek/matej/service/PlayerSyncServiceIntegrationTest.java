@@ -2,6 +2,7 @@ package com.cgi.parizek.matej.service;
 
 import com.cgi.parizek.matej.EntityFactory;
 import com.cgi.parizek.matej.TestRedisConfiguration;
+import com.cgi.parizek.matej.exceptions.EntityNotFoundException;
 import com.cgi.parizek.matej.redis.PlayerCache;
 import com.cgi.parizek.matej.repository.IPlayerRepository;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +18,7 @@ import java.util.stream.IntStream;
 @SpringBootTest
 @ActiveProfiles("test")
 @Import(TestRedisConfiguration.class)
-public class PlayerSyncServiceIntegrationTest {
+public class PlayerSyncServiceIntegrationTest extends AIntegrationTest {
     private final static String PLAYER_CACHE = "player:%s:missions";
 
     @Autowired
@@ -31,11 +32,11 @@ public class PlayerSyncServiceIntegrationTest {
 
     @Test
     public void load_success_without_cache() {
-        var player = playerRepository.save(EntityFactory.player());
+        var player = playerRepository.save(factory.player());
         IntStream.range(2, 10).asLongStream().forEach(i ->
-                playerRepository.save(EntityFactory.player())
+                playerRepository.save(factory.player())
         );
-        var result = service.load(player.getId(),1);
+        var result = service.load(player.getId(), 1);
 
         Assertions.assertEquals(result.getId(), player.getId());
         Assertions.assertEquals(result.getUsername(), player.getUsername());
@@ -58,26 +59,38 @@ public class PlayerSyncServiceIntegrationTest {
         Assertions.assertEquals(result.getProfile().getBio(), cached.getProfile().getBio());
     }
 
+    @Test
+    public void load_entity_notFound() {
+        var request = EntityFactory.playerRequest().build();
+        Assertions.assertThrows(EntityNotFoundException.class, () -> service.update(playerRepository.count() + 1, request));
+    }
+
 
     @Test
-    public void update_success_without_cache(){
-        var player = playerRepository.save(EntityFactory.player());
-        var request = EntityFactory.playerRequest();
+    public void update_success_without_cache() {
+        var player = playerRepository.save(factory.player());
+        var request = EntityFactory.playerRequest().build();
 
-        var update = service.update(player.getId(),request);
+        var update = service.update(player.getId(), request);
 
         var entityOpt = playerRepository.findById(player.getId());
         var entity = entityOpt.orElseThrow(RuntimeException::new);
 
-        Assertions.assertEquals(update.getUsername(),entity.getUsername());
-        Assertions.assertEquals(update.getStatus(),entity.getStatus());
-        Assertions.assertNotEquals(entity.getUpdatedAt(),player.getUpdatedAt());
+        Assertions.assertEquals(update.getUsername(), entity.getUsername());
+        Assertions.assertEquals(update.getStatus(), entity.getStatus());
+        Assertions.assertNotEquals(entity.getUpdatedAt(), player.getUpdatedAt());
         Assertions.assertNotNull(update.getUpdatedAt());
-        Assertions.assertEquals(update.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS),entity.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS));
+        Assertions.assertEquals(update.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS), entity.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS));
         Assertions.assertNotNull(update.getProfile());
         Assertions.assertNotNull(entity.getProfile());
-        Assertions.assertEquals(update.getProfile().getBio(),entity.getProfile().getBio());
-        Assertions.assertEquals(update.getProfile().getCountry(),entity.getProfile().getCountry());
-        Assertions.assertEquals(update.getProfile().getUpdatedAt(),entity.getProfile().getUpdatedAt());
+        Assertions.assertEquals(update.getProfile().getBio(), entity.getProfile().getBio());
+        Assertions.assertEquals(update.getProfile().getCountry(), entity.getProfile().getCountry());
+        Assertions.assertEquals(update.getProfile().getUpdatedAt(), entity.getProfile().getUpdatedAt());
+    }
+
+    @Test
+    public void update_entity_notFound() {
+        var request = EntityFactory.playerRequest().build();
+        Assertions.assertThrows(EntityNotFoundException.class, () -> service.update(playerRepository.count() + 1, request));
     }
 }
