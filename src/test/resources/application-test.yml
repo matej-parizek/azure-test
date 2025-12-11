@@ -14,6 +14,7 @@ spring:
         format_sql: true
   data:
     redis:
+      ttl: 10m
       host: localhost
       password: ""
       port: 6379
@@ -27,5 +28,4 @@ logging:
 
 paging:
   size: 100
-cache:
-  ttl: 10m
+  max-cache-page: 2

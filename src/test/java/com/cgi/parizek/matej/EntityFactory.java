@@ -1,6 +1,8 @@
 package com.cgi.parizek.matej;
 
+import com.cgi.parizek.matej.dto.MissionRewardDto;
 import com.cgi.parizek.matej.dto.PlayerRequestDto;
+import com.cgi.parizek.matej.dto.TagDto;
 import com.cgi.parizek.matej.entity.*;
 import lombok.experimental.UtilityClass;
 import net.datafaker.Faker;
@@ -65,5 +67,19 @@ public class EntityFactory {
         return Tag.builder()
                 .id(id)
                 .name(faker.name().firstName());
+    }
+
+
+    public TagDto.TagDtoBuilder tagDto(Long id){
+        return TagDto.builder()
+                .id(id)
+                .name(faker.name().firstName());
+    }
+
+    public MissionRewardDto.MissionRewardDtoBuilder missionRewardDto(Long id){
+        return MissionRewardDto.builder()
+                .id(id)
+                .amount(faker.number().randomDigit())
+                .rewardType(truncate(faker.naruto().eye(), 50));
     }
 }

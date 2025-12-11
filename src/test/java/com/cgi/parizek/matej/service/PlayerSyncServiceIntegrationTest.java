@@ -1,5 +1,6 @@
 package com.cgi.parizek.matej.service;
 
+import com.cgi.parizek.matej.AIntegrationTest;
 import com.cgi.parizek.matej.EntityFactory;
 import com.cgi.parizek.matej.TestRedisConfiguration;
 import com.cgi.parizek.matej.exceptions.EntityNotFoundException;
@@ -78,14 +79,16 @@ public class PlayerSyncServiceIntegrationTest extends AIntegrationTest {
 
         Assertions.assertEquals(update.getUsername(), entity.getUsername());
         Assertions.assertEquals(update.getStatus(), entity.getStatus());
-        Assertions.assertNotEquals(entity.getUpdatedAt(), player.getUpdatedAt());
+        Assertions.assertNotEquals(entity.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS),
+                player.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS));
         Assertions.assertNotNull(update.getUpdatedAt());
         Assertions.assertEquals(update.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS), entity.getUpdatedAt().truncatedTo(ChronoUnit.MILLIS));
         Assertions.assertNotNull(update.getProfile());
         Assertions.assertNotNull(entity.getProfile());
         Assertions.assertEquals(update.getProfile().getBio(), entity.getProfile().getBio());
         Assertions.assertEquals(update.getProfile().getCountry(), entity.getProfile().getCountry());
-        Assertions.assertEquals(update.getProfile().getUpdatedAt(), entity.getProfile().getUpdatedAt());
+        Assertions.assertEquals(update.getProfile().getUpdatedAt().truncatedTo(ChronoUnit.MILLIS),
+                entity.getProfile().getUpdatedAt().truncatedTo(ChronoUnit.MILLIS));
     }
 
     @Test

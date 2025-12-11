@@ -16,18 +16,9 @@ public class PlayerMapper {
         if (player == null) {
             return null;
         }
-
-        PlayerProfileDto profileDto = PlayerProfileMapper.map(player.getProfile());
-
-        return PlayerDto.builder()
-                .id(player.getId())
-                .username(player.getUsername())
-                .status(player.getStatus())
-                .createdAt(player.getCreatedAt())
-                .updatedAt(player.getUpdatedAt())
-                .profile(profileDto)
-                .missions(missionDto)
-                .build();
+        var dto = map(player);
+        dto.setMissions(missionDto);
+        return dto;
     }
 
     public PlayerDto map(Player player) {

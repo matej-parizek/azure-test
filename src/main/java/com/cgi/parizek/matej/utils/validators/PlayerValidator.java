@@ -4,6 +4,9 @@ import com.cgi.parizek.matej.dto.PlayerRequestDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
+/**
+ * Validator for player
+ */
 public class PlayerValidator {
 
     public boolean validation(PlayerRequestDto body) {
@@ -13,5 +16,4 @@ public class PlayerValidator {
                 !body.getStatus().isBlank() &&
                 body.getStatus().length() <= 20;
     }
-
 }
