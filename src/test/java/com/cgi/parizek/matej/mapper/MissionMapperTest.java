@@ -61,4 +61,11 @@ public class MissionMapperTest {
             assertThat(dto.getName()).isEqualTo(mission.getName());
         }
     }
+
+    @Test
+    @DisplayName("Map null mission should return null")
+    void map_null_mission() {
+        var dto = MissionMapper.map(null);
+        assertThat(dto).isNull();
+    }
 }

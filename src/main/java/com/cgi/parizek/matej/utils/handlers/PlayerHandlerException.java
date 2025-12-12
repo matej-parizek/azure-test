@@ -1,14 +1,15 @@
 package com.cgi.parizek.matej.utils.handlers;
 
 import com.cgi.parizek.matej.exceptions.EntityNotFoundException;
+import com.cgi.parizek.matej.exceptions.InvalidBodyException;
 import com.cgi.parizek.matej.exceptions.InvalidParameterException;
+import com.cgi.parizek.matej.exceptions.InvalidQueryException;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpRequestMessage;
 import com.microsoft.azure.functions.HttpResponseMessage;
 import com.microsoft.azure.functions.HttpStatus;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.QueryArgumentException;
 
 @Slf4j
 @UtilityClass
@@ -29,7 +30,8 @@ public class PlayerHandlerException {
     ) {
         try {
             return fn.exec();
-        } catch (InvalidParameterException | QueryArgumentException e) {
+        } catch (InvalidParameterException | InvalidQueryException | InvalidBodyException e) {
+            context.getLogger().severe(e.getMessage());
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage())
                     .build();

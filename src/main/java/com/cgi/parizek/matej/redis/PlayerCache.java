@@ -7,11 +7,13 @@ import com.cgi.parizek.matej.dto.MissionDto;
 import com.cgi.parizek.matej.dto.PlayerDto;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 public class PlayerCache extends RedisCache<PlayerDto> implements IPlayerCache {
     /**
@@ -46,6 +48,7 @@ public class PlayerCache extends RedisCache<PlayerDto> implements IPlayerCache {
         try {
             return objectMapper.convertValue(raw, type);
         } catch (IllegalArgumentException ex) {
+            log.error("Cannot convert data", ex);
             redisTemplate.opsForHash().delete(key, MISSION_KEY.formatted(page, pagingProperties.getSize()));
             return null;
         }

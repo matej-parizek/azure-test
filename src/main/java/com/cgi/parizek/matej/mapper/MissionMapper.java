@@ -15,9 +15,8 @@ import java.util.stream.Collectors;
 public class MissionMapper {
 
     public MissionDto map(Mission mission) {
-        if (mission == null) {
+        if (mission == null)
             return null;
-        }
 
         List<MissionRewardDto> rewards = mission.getRewards() == null
                 ? Collections.emptyList()

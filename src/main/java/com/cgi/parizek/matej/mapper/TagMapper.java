@@ -8,9 +8,9 @@ import lombok.experimental.UtilityClass;
 public class TagMapper {
 
     public TagDto map(Tag tag) {
-        if (tag == null) {
+        if (tag == null)
             return null;
-        }
+
         return TagDto.builder()
                 .name(tag.getName())
                 .id(tag.getId())

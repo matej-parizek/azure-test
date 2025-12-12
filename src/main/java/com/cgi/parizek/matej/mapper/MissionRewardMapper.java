@@ -8,9 +8,9 @@ import lombok.experimental.UtilityClass;
 public class MissionRewardMapper {
 
     public MissionRewardDto map(MissionReward reward) {
-        if (reward == null) {
+        if (reward == null)
             return null;
-        }
+
         return MissionRewardDto.builder()
                 .id(reward.getId())
                 .rewardType(reward.getRewardType())

@@ -1,5 +1,6 @@
 package com.cgi.parizek.matej;
 
+import com.cgi.parizek.matej.dto.MissionDto;
 import com.cgi.parizek.matej.dto.MissionRewardDto;
 import com.cgi.parizek.matej.dto.PlayerRequestDto;
 import com.cgi.parizek.matej.dto.TagDto;
@@ -32,6 +33,7 @@ public class EntityFactory {
                 .playerId(id)
                 .age(faker.number().numberBetween(18, 80))
                 .bio(word)
+                .updatedAt(LocalDateTime.now())
                 .country(truncate(faker.country().name(), 50));
     }
 
@@ -81,5 +83,18 @@ public class EntityFactory {
                 .id(id)
                 .amount(faker.number().randomDigit())
                 .rewardType(truncate(faker.naruto().eye(), 50));
+    }
+
+    public MissionDto.MissionDtoBuilder missionDto(Long id){
+       return MissionDto.builder()
+                .id(id)
+                .type(faker.options().option("DAILY", "WEEKLY", "STORY", "EVENT"))
+                .name(faker.esports().event())
+                .description(faker.lorem().sentence())
+                .completed(faker.bool().bool())
+                .progress(faker.number().numberBetween(0, 50))
+                .requiredProgress(faker.number().numberBetween(50, 100))
+                .updatedAt(LocalDateTime.now());
+
     }
 }

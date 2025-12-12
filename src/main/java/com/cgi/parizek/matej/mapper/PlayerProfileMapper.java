@@ -8,13 +8,12 @@ import lombok.experimental.UtilityClass;
 public class PlayerProfileMapper {
 
     public PlayerProfileDto map(PlayerProfile profile) {
-        if (profile == null) {
+        if (profile == null)
             return null;
-        }
 
         Long playerId = profile.getPlayer() != null
                 ? profile.getPlayer().getId()
-                : null;
+                : profile.getPlayerId();
 
         return PlayerProfileDto.builder()
                 .playerId(playerId)

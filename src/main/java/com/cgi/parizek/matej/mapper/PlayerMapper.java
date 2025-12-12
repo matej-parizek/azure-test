@@ -13,18 +13,16 @@ import java.util.List;
 public class PlayerMapper {
 
     public PlayerDto map(Player player, List<MissionDto> missionDto) {
-        if (player == null) {
+        if (player == null)
             return null;
-        }
         var dto = map(player);
         dto.setMissions(missionDto);
         return dto;
     }
 
     public PlayerDto map(Player player) {
-        if (player == null) {
+        if (player == null)
             return null;
-        }
 
         PlayerProfileDto profileDto = PlayerProfileMapper.map(player.getProfile());
 
