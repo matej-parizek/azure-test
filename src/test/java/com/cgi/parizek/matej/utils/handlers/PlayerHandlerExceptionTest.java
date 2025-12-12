@@ -40,7 +40,6 @@ class PlayerHandlerExceptionTest {
     @ParameterizedTest(name = "Test exception handling for exception: {0}")
     @MethodSource("provideTestData")
     public void testPlayerHandlerException(Pair<RuntimeException, HttpStatus> ex) {
-        var context = mock(ExecutionContext.class);
         doReturn(Logger.getGlobal()).when(context).getLogger();
 
         when(functionExecutor.exec()).thenThrow(ex.getLeft());
@@ -48,6 +47,7 @@ class PlayerHandlerExceptionTest {
             HttpStatus status = invocation.getArgument(0);
             HttpResponseMessage.Builder builder = mock(HttpResponseMessage.Builder.class);
             when(builder.body(anyString())).thenReturn(builder);
+            when(builder.header(any(),any())).thenReturn(builder);
             when(builder.build()).thenAnswer(buildInvocation -> {
                 HttpResponseMessage response = mock(HttpResponseMessage.class);
                 when(response.getStatus()).thenReturn(status);
