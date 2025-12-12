@@ -18,16 +18,15 @@ import org.springframework.test.context.ActiveProfiles;
 import javax.sql.DataSource;
 
 @DirtiesContext
-@SpringBootTest
 @ActiveProfiles("test")
-public class ContextTest {
+@SpringBootTest
+class PlayerMissionsApplicationTests {
 
     @Autowired
     ApplicationContext applicationContext;
 
-
     @Test
-    public void testContext() {
+    void contextLoads() {
         Assertions.assertNotNull(applicationContext);
         Assertions.assertNotNull(applicationContext.getBean(MissionService.class));
         Assertions.assertNotNull(applicationContext.getBean(PlayerService.class));

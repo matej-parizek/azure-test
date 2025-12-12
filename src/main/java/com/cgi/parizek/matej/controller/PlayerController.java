@@ -65,7 +65,7 @@ public class PlayerController {
             var body = request.getBody().orElseThrow(() -> new InvalidBodyException("Body is null"));
             var playerId = BaseValidator.parseId(playerIdStr);
 
-            if (PlayerValidator.validation(body))
+            if (!PlayerValidator.validation(body))
                 return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
                         .body("Invalid request body")
                         .build();

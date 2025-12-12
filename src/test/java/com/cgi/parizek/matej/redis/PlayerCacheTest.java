@@ -53,8 +53,6 @@ class PlayerCacheTest {
     @BeforeEach
     void setUp() {
         when(redisTemplate.opsForHash()).thenReturn(hashOperations);
-        when(pagingProperties.getSize()).thenReturn(5);
-
         playerCache = new PlayerCache(cacheProperties, redisTemplate, pagingProperties, objectMapper);
     }
 
@@ -63,6 +61,7 @@ class PlayerCacheTest {
     void save_missions_puts_into_hash_with_formatted_field() {
         List<MissionDto> missions = List.of(new MissionDto(), new MissionDto());
         int page = 2;
+        when(pagingProperties.getSize()).thenReturn(5);
 
         playerCache.saveMissions(KEY, missions, page);
 
@@ -74,6 +73,8 @@ class PlayerCacheTest {
     @DisplayName("Retrieve mission when raw data is null")
     void retrieve_mission_raw_null() {
         int page = 1;
+        when(pagingProperties.getSize()).thenReturn(5);
+
         when(hashOperations.get(eq(KEY), any())).thenReturn(null);
 
         List<MissionDto> result = playerCache.getMissions(KEY, page);
@@ -87,6 +88,8 @@ class PlayerCacheTest {
     @DisplayName("Retrieve mission when conversion succeeds returns list of MissionDto")
     void retrieve_mission_conversion_success() {
         int page = 3;
+        when(pagingProperties.getSize()).thenReturn(5);
+
         List<MissionDto> raw = List.of(EntityFactory.missionDto(1L).build(),
                 EntityFactory.missionDto(2L).build());
 
@@ -101,8 +104,8 @@ class PlayerCacheTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertTrue(result.get(0) instanceof MissionDto);
-        assertTrue(result.get(1) instanceof MissionDto);
+        assertInstanceOf(MissionDto.class, result.get(0));
+        assertInstanceOf(MissionDto.class, result.get(1));
 
         verify(hashOperations, never()).delete(anyString(), any());
     }
@@ -112,16 +115,46 @@ class PlayerCacheTest {
     void retrieve_mission_conversion_fails_deletes_and_returns_null() {
         int page = 4;
         Object raw = new Object();
+        when(pagingProperties.getSize()).thenReturn(5);
+
         when(hashOperations.get(eq(KEY), any())).thenReturn(raw);
 
         doThrow(new IllegalArgumentException("invalid format"))
                 .when(objectMapper).convertValue(eq(raw), any(JavaType.class));
 
-        List<MissionDto> result = playerCache.getMissions(KEY, page);
+        var result = playerCache.getMissions(KEY, page);
 
         assertNull(result);
 
         String expectedField = String.format("page:%s:%s:mission", page, pagingProperties.getSize());
         verify(hashOperations, times(1)).delete(KEY, expectedField);
+    }
+
+    @Test
+    @DisplayName("Get cache from different type than expected, throws and clears cache")
+    void diff_cache_type() {
+        int page = 5;
+        Object raw = "This is a string, not a list of MissionDto";
+        when(pagingProperties.getSize()).thenReturn(5);
+
+        when(hashOperations.get(eq(KEY), any())).thenReturn(raw);
+
+        var result = playerCache.getMissions(KEY, page);
+
+        assertNull(result);
+
+        String expectedField = String.format("page:%s:%s:mission", page, pagingProperties.getSize());
+        verify(hashOperations, times(1)).delete(KEY, expectedField);
+    }
+
+    @Test
+    @DisplayName("Throw exception during retrievala and delete cache field, beacause data is unmatachable")
+    void exception_during_retrieval() {
+        Object raw = "This is a string, not a player entity";
+        when(hashOperations.get(anyString(), any())).thenReturn(raw);
+
+        var result = playerCache.get("some");
+        assertNull(result);
+        verify(redisTemplate, times(1)).delete("some");
     }
 }

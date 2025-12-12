@@ -79,4 +79,11 @@ class BaseValidatorTest {
         assertThrows(InvalidQueryException.class,
                 () -> BaseValidator.parsePage("xyz"));
     }
+
+    @Test
+    @DisplayName("ParsePage throws when input is non numeric")
+    void parse_page_negative() {
+        assertThrows(InvalidQueryException.class,
+                () -> BaseValidator.parsePage("-1"));
+    }
 }

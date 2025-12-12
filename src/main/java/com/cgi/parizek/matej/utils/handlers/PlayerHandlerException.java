@@ -33,18 +33,21 @@ public class PlayerHandlerException {
         } catch (InvalidParameterException | InvalidQueryException | InvalidBodyException e) {
             context.getLogger().severe(e.getMessage());
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                    .header("Content-Type", "application/json")
                     .body(e.getMessage())
                     .build();
         } catch (EntityNotFoundException e) {
             context.getLogger().severe(e.getMessage());
             log.error("Entity cannot be found:", e);
             return request.createResponseBuilder(HttpStatus.NOT_FOUND)
+                    .header("Content-Type", "application/json")
                     .body(e.getMessage())
                     .build();
         } catch (Exception e) {
             context.getLogger().severe("Unexpected error: " + e.getMessage());
             log.error("Unexpected error:", e);
             return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Content-Type", "application/json")
                     .body("Internal server error: " + e.getMessage())
                     .build();
         }

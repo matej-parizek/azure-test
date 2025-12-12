@@ -30,6 +30,7 @@
         <openapi-tools.version>7.17.0</openapi-tools.version>
         <mssql-container.version>1.21.3</mssql-container.version>
         <redis-embeded.version>1.4.2</redis-embeded.version>
+        <jackson.version>2.19.4</jackson.version>
     </properties>
     <dependencies>
         <dependency>
@@ -127,6 +128,11 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.codemonstur</groupId>
