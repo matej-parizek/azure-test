@@ -1,0 +1,187 @@
+openapi: 3.0.3
+info:
+  title: Player Missions API
+  version: 1.0.0
+
+paths:
+  /sync/players/{playerId}:
+    parameters:
+      - name: playerId
+        in: path
+        required: true
+        description: Player ID
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Sync player missions
+      operationId: syncPlayerMissions
+      responses:
+        '200':
+          description: Player found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerDto'
+        '400':
+          description: Invalid parameters
+        '404':
+          description: Player not found
+        '500':
+          description: Unexpected failure
+    put:
+      summary: Update new player
+      operationId: updatePlayer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerRequestDto'
+      responses:
+        '201':
+          description: Player created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerDto'
+        '404':
+          description: Player not found
+        '400':
+          description: Invalid parameters
+        '500':
+          description: Unexpected failure
+components:
+  schemas:
+    TagDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Tag identifier
+        name:
+          type: string
+          description: Tag name
+      required:
+        - name
+
+    MissionRewardDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Reward identifier
+        rewardType:
+          type: string
+          description: Type of reward (e.g. COINS, GEMS)
+        amount:
+          type: integer
+          format: int32
+          description: Reward amount
+      required:
+        - rewardType
+        - amount
+        - id
+
+    MissionDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+          description: Mission type (e.g. DAILY, WEEKLY)
+        name:
+          type: string
+        description:
+          type: string
+        completed:
+          type: boolean
+        progress:
+          type: integer
+          format: int32
+        requiredProgress:
+          type: integer
+          format: int32
+        updatedAt:
+          type: string
+          format: date-time
+        rewards:
+          type: array
+          items:
+            $ref: '#/components/schemas/MissionRewardDto'
+        tags:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/TagDto'
+      required:
+        - type
+        - name
+        - completed
+        - progress
+        - requiredProgress
+        - id
+
+    PlayerProfileDto:
+      type: object
+      description: Player profile details
+      properties:
+        playerId:
+          type: integer
+          format: int64
+        country:
+          type: string
+        age:
+          type: integer
+        bio:
+          type: string
+          maxLength: 255
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - playerId
+
+    PlayerRequestDto:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 50
+        status:
+          type: string
+          maxLength: 20
+      required:
+        - username
+        - status
+
+    PlayerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        profile:
+          $ref: '#/components/schemas/PlayerProfileDto'
+        missions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MissionDto'
+      required:
+        - username
+        - status
+        - id
